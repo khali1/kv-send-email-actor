@@ -1,39 +1,33 @@
-// Axios - Promise based HTTP client for the browser and node.js (Read more at https://axios-http.com/docs/intro).
-import axios from 'axios';
-// Cheerio - The fast, flexible & elegant library for parsing and manipulating HTML and XML (Read more at https://cheerio.js.org/).
-import * as cheerio from 'cheerio';
-// Apify SDK - toolkit for building Apify Actors (Read more at https://docs.apify.com/sdk/js/).
 import { Actor } from 'apify';
-// this is ESM project, and as such, it requires you to specify extensions in your relative imports
-// read more about this here: https://nodejs.org/docs/latest-v18.x/api/esm.html#mandatory-file-extensions
-// import { router } from './routes.js';
 
-// The init() call configures the Actor for its environment. It's recommended to start every Actor with an init().
 await Actor.init();
 
 // Structure of input is defined in input_schema.json
-const input = await Actor.getInput();
-const { url } = input;
+const { kvStoreId, ...rest }  = await Actor.getInput();
 
-// Fetch the HTML content of the page.
-const response = await axios.get(url);
+const kvStore = await Actor.openKeyValueStore(kvStoreId || rest?.payload?.resource?.defaultDatasetId);
 
-// Parse the downloaded HTML with Cheerio to enable data extraction.
-const $ = cheerio.load(response.data);
+if (!kvStore) {
+    throw new Error('No KV store found');
+}
 
-// Extract all headings from the page (tag name and text).
-const headings = [];
-$("h1, h2, h3, h4, h5, h6").each((i, element) => {
-    const headingObject = {
-        level: $(element).prop("tagName").toLowerCase(),
-        text: $(element).text(),
-    };
-    console.log("Extracted heading", headingObject);
-    headings.push(headingObject);
+const subject = await kvStore.getValue('subject');
+const text = await kvStore.getValue('text');
+
+if (!subject || !text) {
+    throw new Error('No email data found in KV store');
+}
+
+// Prepare email configuration
+const emailPayload = {
+    ...rest,
+    subject,
+    text,
+};
+
+// Call the send-mail actor
+await Actor.call('apify/send-mail', {
+    input: emailPayload
 });
 
-// Save headings to Dataset - a table-like storage.
-await Actor.pushData(headings);
-
-// Gracefully exit the Actor process. It's recommended to quit all Actors with an exit().
 await Actor.exit();
