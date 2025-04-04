@@ -2,14 +2,12 @@
 	"name": "kv-send-mail",
 	"version": "0.0.1",
 	"type": "module",
-	"description": "This is an example of an Apify actor.",
+	"description": "Wrapper actor to send email using Apify's send-mail actor using a key-value store",
 	"engines": {
 		"node": ">=18.0.0"
 	},
 	"dependencies": {
-		"apify": "^3.2.6",
-		"axios": "^1.5.0",
-		"cheerio": "^1.0.0-rc.12"
+		"apify": "^3.2.6"
 	},
 	"scripts": {
 		"start": "node ./src/main.js",

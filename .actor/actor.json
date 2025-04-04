@@ -1,0 +1,12 @@
+{
+	"actorSpecification": 1,
+	"name": "kv-send-mail",
+	"title": "Email Sender Actor Input with KV Store",
+	"description": "Wrapper actor to send email using Apify's send-mail actor using a key-value store",
+	"version": "0.0",
+	"meta": {
+		"templateId": "js-start"
+	},
+	"input": "./input_schema.json",
+	"dockerfile": "./Dockerfile"
+}

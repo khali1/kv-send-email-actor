@@ -1,0 +1,62 @@
+{
+  "title": "Email Sender Actor Input with KV Store",
+  "description": "Wrapper actor to send email using Apify's send-mail actor using a key-value store",
+  "type": "object",
+  "schemaVersion": 1,
+  "properties": {
+    "subject": {
+      "title": "Subject",
+      "type": "string",
+      "description": "Text body of Email, when empty, data is taken from kv store.",
+      "editor": "textfield"
+    },
+    "text": {
+      "title": "Text",
+      "type": "string",
+      "description": "Text body of Email, when empty, data is taken from kv store.",
+      "example": "Hi there!",
+      "editor": "textfield"
+    },
+    "kvStoreId": {
+      "title": "KV Store ID",
+      "type": "string",
+      "description": "ID of the KV store containing email data. The KV store should have two keys: 'subject' and 'text' which are used as subject and text of the email respectively.",
+      "editor": "textfield"
+    },
+    "to": {
+      "title": "To",
+      "type": "string",
+      "description": "Email address of the recipient(s), you can comma-separate multiple addresses.",
+      "prefill": "info@apify.com, hello@apify.com",
+      "editor": "textfield"
+    },
+    "cc": {
+      "title": "Copy",
+      "type": "string",
+      "description": "Email CC same format as to.",
+      "example": "copy@apify.com",
+      "editor": "textfield"
+    },
+    "bcc": {
+      "title": "Blind copy",
+      "type": "string",
+      "description": "Email BCC same format as to.",
+      "example": "unseencopy@apify.com",
+      "editor": "textfield"
+    },
+    "replyTo": {
+      "title": "Reply to",
+      "type": "string",
+      "description": "Email address which will be set when recipient will try to reply to mail. Uses header Reply-To <a href= \"https://tools.ietf.org/html/rfc5322#section-3.6.2\">see doc </a>",
+      "example": "replyto@apify.com",
+      "editor": "textfield"
+    },
+    "isMock": {
+      "title": "Mock email",
+      "type": "boolean",
+      "description": "For test purposes - log process to console but not send the e-mail",
+      "default": false
+    }
+  },
+  "required": ["to"]
+}
