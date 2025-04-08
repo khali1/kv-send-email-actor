@@ -3,18 +3,25 @@ import { Actor, log } from "apify";
 await Actor.init();
 
 // Structure of input is defined in input_schema.json
-const { kvStoreId, ...rest } = await Actor.getInput();
+const {
+  kvStoreId,
+  subjectOverride,
+  textOverride,
+  subjectKeyOverride,
+  textKeyOverride,
+  ...rest
+} = await Actor.getInput();
 
 const kvStore = await Actor.openKeyValueStore(
   kvStoreId || rest?.payload?.resource?.defaultKeyValueStoreId
 );
 
-if (!kvStore && !rest.subject && !rest.text) {
+if (!kvStore && !subjectOverride && !textOverride) {
   throw new Error("No KV store found");
 }
 
-const subject = rest.subject || (await kvStore.getValue("subject"));
-const text = rest.text || (await kvStore.getValue("text"));
+const subject = subjectOverride || (await kvStore.getValue(subjectKeyOverride));
+const text = textOverride || (await kvStore.getValue(textKeyOverride));
 
 if (!subject) {
   throw new Error("No subject specified or found in KV store");

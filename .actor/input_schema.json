@@ -4,18 +4,33 @@
   "type": "object",
   "schemaVersion": 1,
   "properties": {
-    "subject": {
-      "title": "Subject",
+    "subjectOverride": {
+      "title": "Subject Override",
       "type": "string",
-      "description": "Text body of Email, when empty, data is taken from kv store.",
+      "description": "Subject of Email, when empty, data is taken from kv store.",
       "editor": "textfield"
     },
-    "text": {
-      "title": "Text",
+    "textOverride": {
+      "title": "Text Override",
       "type": "string",
       "description": "Text body of Email, when empty, data is taken from kv store.",
       "example": "Hi there!",
       "editor": "textfield"
+    },
+    "subjectKeyOverride": {
+      "title": "Subject Key Override",
+      "type": "string",
+      "description": "Changes the key to the subject stored in KV store.",
+      "editor": "textfield",
+      "default": "subject"
+    },
+    "textKeyOverride": {
+      "title": "Text Key Override",
+      "type": "string",
+      "description": "Changes the key to the text stored in KV store.",
+      "example": "my_text_key",
+      "editor": "textfield",
+      "default": "text"
     },
     "kvStoreId": {
       "title": "KV Store ID",
